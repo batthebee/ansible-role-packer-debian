@@ -48,7 +48,8 @@
 
 # VirtualBox tools installation.
 - name: Check if VirtualBox is running the guest VM.
-  stat: path=/home/{{ ansible_user }}/.vbox_version
+  stat: 
+    path: "/home/{{ ansible_user }}/.vbox_version"
   register: virtualbox_check
 
 - include: virtualbox.yml
@@ -66,7 +67,9 @@
 
 # Cleanup tasks.
 - name: Remove unneeded packages.
-  apt: "name={{ item }} state=absent"
+  apt: 
+    name: "{{ item }}"
+    state: absent
   with_items:
     - ppp
     - pppconfig
@@ -83,10 +86,12 @@
     - linux-source
 
 - name: Remove unneeded packages (by regex).
-  shell: "apt-get -y remove '.*-dev$'"
+  apt: 
+    name: ".*-dev$"
+    state: absent
 
 - name: Clean up apt.
-  command: "{{ item }}"
-  with_items:
-    - apt-get -y autoremove
-    - apt-get -y clean
+  apt: 
+    autoclean: true
+    autoremove: true
+  
