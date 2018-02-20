@@ -1,7 +1,9 @@
 ---
-# TODO: Consider adding "upgrade=full" to also update everything.
 - name: Ensure apt cache is updated.
-  apt: update_cache=yes cache_valid_time=3600
+  apt: 
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: yes
 
 - name: Ensure correct kernel headers are installed.
   shell: "apt-get -y install linux-headers-$(uname -r)"
@@ -27,26 +29,26 @@
     - regexp: '^GSSAPIAuthentication'
       line: 'GSSAPIAuthentication no'
 
-# Vagrant SSH configuration.
-- name: Configure Vagrant .ssh directory.
+# SSH configuration.
+- name: Configure .ssh directory.
   file:
-    path: /home/vagrant/.ssh
+    path: "/home/{{ ansible_user }}/.ssh"
     state: directory
-    owner: vagrant
-    group: vagrant
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: 0700
 
 - name: Get Vagrant's public key.
   get_url:
     url: https://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub
-    dest: /home/vagrant/.ssh/authorized_keys
-    owner: vagrant
-    group: vagrant
+    dest: "/home/{{ ansible_user }}/.ssh/authorized_keys"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: 0600
 
 # VirtualBox tools installation.
 - name: Check if VirtualBox is running the guest VM.
-  stat: path=/home/vagrant/.vbox_version
+  stat: path=/home/{{ ansible_user }}/.vbox_version
   register: virtualbox_check
 
 - include: virtualbox.yml
