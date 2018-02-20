@@ -52,7 +52,7 @@
     path: "/home/{{ ansible_user }}/.vbox_version"
   register: virtualbox_check
 
-- include: virtualbox.yml
+- import_tasks: virtualbox.yml
   when: virtualbox_check.stat.exists
 
 # VMware tools installation.
@@ -62,7 +62,7 @@
   failed_when: false
   register: vmware_check
 
-- include: vmware.yml
+- import_tasks: vmware.yml
   when: vmware_check.stdout | int > 0
 
 # Cleanup tasks.
