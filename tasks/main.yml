@@ -87,7 +87,7 @@
 
 - name: Remove unneeded packages (by regex).
   apt: 
-    name: ".*-dev$"
+    name: ".*-dev"
     state: absent
 
 - name: Clean up apt.
