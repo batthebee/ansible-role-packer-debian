@@ -65,31 +65,6 @@
 - import_tasks: vmware.yml
   when: vmware_check.stdout | int > 0
 
-# Cleanup tasks.
-- name: Remove unneeded packages.
-  apt: 
-    name: "{{ item }}"
-    state: absent
-  with_items:
-    - ppp
-    - pppconfig
-    - pppoeconf
-    - cpp
-    - gcc
-    - g++
-    - libx11-data
-    - xauth
-    - libxmuu1
-    - libxcb1
-    - libx11-6
-    - libxext6
-    - linux-source
-
-- name: Remove unneeded packages (by regex).
-  apt: 
-    name: "*-dev"
-    state: absent
-
 - name: Clean up apt.
   apt: 
     autoclean: true
